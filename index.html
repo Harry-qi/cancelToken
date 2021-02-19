@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="users" name="users">
+            <el-table  :data="userList"
+                       style="width: 100%">
+              <el-table-column
+                    prop="title"
+                    label="title"
+                    width="180">
+              </el-table-column>
+              <el-table-column
+                    prop="userId"
+                    label="userId"
+                    width="180">
+              </el-table-column>
+            </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="todos" name="todos">
+          <el-table  :data="todoList"
+                     style="width: 100%">
+            <el-table-column
+                    prop="name"
+                    label="name"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="email"
+                    label="email"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                      prop="address"
+                      label="address"
+                      width="180">
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="comments" name="comments">
+          <el-table  :data="commentsList"
+                     style="width: 100%">
+            <el-table-column
+                    prop="name"
+                    label="name"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="email"
+                    label="email"
+                    width="180">
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+    </el-tabs>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="./api/index.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      activeName: 'users',
+      userList:[],
+      todoList:[],
+      commentsList:[]
+    },
+    created(){
+      getUsers().then(res=>{
+        this.todoList = res.data
+      })
+    },
+    methods:{
+      // 点击切换tabs,请求不同接口
+      handleClick(tab, event){
+        switch (tab.name) {
+          case 'users':
+            getUsers().then(res=>{
+              this.todoList = res.data
+            })
+            break;
+          case 'todos':
+            getTodos().then(res=>{
+              this.userList = res.data
+            })
+            break;
+          case 'comments':
+            getComments().then(res=>{
+              this.commentsList = res.data
+            })
+            break;
+        }
+      }
+    }
+  })
+</script>
+</body>
+</html>
